@@ -251,7 +251,7 @@ class NoticeUpdateTestCase(APITestCase):
 ### 전체 update
 전체 테스트의 경우에는 미리 데이터를 선언해 두었으므로 간단하다.
 ```python
-        def test_notice_update_success(self):
+    def test_notice_update_success(self):
         response  = self.client.patch(
             self.url,
             data=self.data
