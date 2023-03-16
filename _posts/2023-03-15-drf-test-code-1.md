@@ -8,8 +8,8 @@ img_path: /assets/img/2023-03-15/
 
 # 개요
 테스트 코드.
-테스트에 대한 중요성은 굳이 말 하지 않아도 잘 알수 있다.
-내가 개발한 코드가 의도된 대로 작성되었는지 검증하는 것은 무엇보다 중요하다. 
+테스트에 대한 중요성은 굳이 말 하지 않아도 잘 알수 있다.  
+내가 개발한 코드가 의도된 대로 작성되었는지 검증하는 것은 무엇보다 중요하다.  
 테스트 주도 개발(TDD) 라는 개발 방법론까지 있는 데다가, 기업의 과제 테스트나 면접 등에서 테스트에 관한 이야기는 빼놓을 수 없을 정도다.
 
 Django에서도 이런 테스트 코드를 잘 작성할 수 있게 지원해주고 있다.
@@ -18,8 +18,9 @@ Django에서도 이런 테스트 코드를 잘 작성할 수 있게 지원해주
 [공식 문서](https://docs.djangoproject.com/en/4.1/topics/testing/overview/)를 참고하면 테스트 코드를 실행하는 과정은 다음과 같다.
 
 ## 테스트 코드 작성
-startapp으로 app을 만들었다면 tests.py 라는 파일이 존재할 것이다.
+startapp으로 app을 만들었다면 tests.py 라는 파일이 존재할 것이다.  
 해당 파일을 사용해도 좋고, 다른 파일을 만들어도 좋다.
+
 테스트 실행 시 모든 `test*.py` 를 검색하여 실행하기 때문에, 해당 양식에 맞추어 파일을 작성하기만 하면 된다.
 
 공식문서에 나온 예시는 다음과 같다.
@@ -61,7 +62,7 @@ python manage.py test animals.tests.AnimalTestCase.test_animals_can_speak
 ```
 
 # DRF에서의 테스트 방법
-DRF에서 테스트 코드를 작성하고 실행하는 과정은 동일하다.
+DRF에서 테스트 코드를 작성하고 실행하는 과정은 동일하다.  
 물론, DRF에는 그에 맞는 테스트 코드를 작성하는 방법이 있으니 그 방법을 사용하는 것이 더 바람직하다.
 
 DRF에서는 Django test case 클래스인 `TestCase`를 상속한 `APITestCase`가 있다.
@@ -86,11 +87,12 @@ DRF에서는 Django test case 클래스인 `TestCase`를 상속한 `APITestCase`
 ...
 ```
 디렉토리 구조는 다음과 같이 설정하였다.
-`notice` 앱의 경우, CRUD가 전부 포함되어 있다.
+
+`notice` 앱의 경우, CRUD가 전부 포함되어 있다.  
 tests.py 파일 하나만 사용할 경우 파일 길이가 너무 길어지고 한눈에 찾아보기 어렵다.
 
 ## setUpTestData와 setUp
-디렉토리를 구성했다면 다음으로는 테스트에 사용될 데이터를 선언하는 단계이다.
+디렉토리를 구성했다면 다음으로는 테스트에 사용될 데이터를 선언하는 단계이다.  
 여기서 두 가지의 데이터 선언 방법이 있다.
 
 ```python
@@ -117,6 +119,7 @@ setUp()
 - 테스트 메소드가 실행될 때 마다 실행.
 
 두 메소드에는 위와 같은 차이가 있다.
+
 그렇다면 여기서 시작할 때 한번만 초기화를 진행해도 될 경우에는 `setUpTestData`를, 여러번 초기화가 필요한 데이터는 `setUp`을 사용하면 될 것이라 예상할 수 있다.
 
 기본적으로 테스트에서 필요로 하는 데이터는 다음과 같다.
@@ -131,6 +134,7 @@ setUp()
 
 ### setUpTestData(cls)
 `setUpTestData`는 클래스 메소드로 self 대신 cls를 사용한다.
+
 해당 메소드에서는 다음과 같은 데이터를 선언하였다.
 - 클라이언트 및 클라이언트에 로그인 처리
 - 미리 선언할 데이터
@@ -166,7 +170,7 @@ cls.client.credentials(
     HTTP_AUTHORIZATION=f"Bearer {access}"
 )
 ```
-사용자를 생성하고, 이를 기반으로 클라이언트에 로그인해 주었다.
+사용자를 생성하고, 이를 기반으로 클라이언트에 로그인해 주었다.  
 세션 로그인, 토큰 로그인에 따라 다른 방법을 사용한다.
 
 ```python
@@ -186,6 +190,7 @@ cls.url = f"/notice/{cls.notice.id}/"
 
 ### setUp(self)
 해당 부분에서는 메소드를 실행할 때 전달할 데이터를 정의한다.
+
 예시에서는 update를 예시로 들었기 때문에, 그에 대한 데이터를 선언하였다.
 ```python
 self.data = {
@@ -242,11 +247,15 @@ class NoticeUpdateTestCase(APITestCase):
 - 일부 update
 
 물론 이 외에도 update 권한 체크나, url의 id 범위 벗어남, 잘못된 패러미터 등 많은 케이스가 존재한다.
+
 하지만 여기서는 위의 두 케이스만 고려하였다.
 
 테스트에서는 APIClient의 HTTP method를 호출하고, response를 통해 데이터를 확인할 수 있다.
+
 일반적으로 `self.assertEqual()`를 자주 사용한다.
-이외의 메소드는 [unittest 문서](https://docs.python.org/ko/3/library/unittest.html#assert-methods)와 django test 문서의 [assertions 파트](https://docs.djangoproject.com/en/4.1/topics/testing/tools/#assertions)를 통해 확인할 수 있다.
+이외의 메소드는 다음 문서를 통해 확인할 수 있다.
+- python 공식 문서 [unittest 문서](https://docs.python.org/ko/3/library/unittest.html#assert-methods)
+- django 공식 문서 [assertions 파트](https://docs.djangoproject.com/en/4.1/topics/testing/tools/#assertions)
 
 ### 전체 update
 전체 테스트의 경우에는 미리 데이터를 선언해 두었으므로 간단하다.
