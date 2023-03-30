@@ -191,7 +191,7 @@ class CoffeeSerializer(serializers.ModelSerializer):
 
 이 Serializer는 GET 요청 시 사용한다.
 `커피` 모델의 `원두`를 SerializerMethodField로 재정의 하고 메소드를 만든다.
-SerializerMethodField는 기본적으로 get_<변수명>과 연결된다.
+SerializerMethodField는 기본적으로 get_\<변수명\>과 연결된다.
 선언 시 method_name 옵션을 줄 경우 다른 메소드도 사용할 수 있지만, 기본적으로 주어지는 것을 쓰기로 했다.
 
 메소드 내용은 다음과 같다.
