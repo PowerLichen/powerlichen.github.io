@@ -117,10 +117,8 @@ class 커피(models.Model):
 
 ```python
 # views.py
-...
 def destroy(self, request, *args, **kwargs):
     return super().update(request, *args, **kwargs)
-...
 ```
 
 DELETE 작업이 삭제플래그(DEL_FL)를 갱신하는 UPDATE 작업이 되었으므로, update를 호출하도록 오버라이딩 한다.
