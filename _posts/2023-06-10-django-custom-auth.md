@@ -125,6 +125,9 @@ class UserViewSet(
 ## serializers.py 정의하기
 ```python
 # serializers.py
+from django.contrib.auth import authenticate
+...
+
 class UserLoginSerializer(serializers.Serializer):
     user_name = serializers.CharField()
     password = serializers.CharField(write_only=True)
@@ -136,11 +139,16 @@ class UserLoginSerializer(serializers.Serializer):
             "password": attrs["password"]
         }
         user = authenticate(**authenticate_kwargs)
+        if user is None:
+            raise AuthenticationFailed("로그인할 수 없습니다.")
+        
         token, created = Token.objects.get_or_create(user=user)
         attrs["token"] = token.key
         return attrs
 ```
 `view`의 메소드에서 토큰 부분이 빠졌기 때문에, validate에 해당 코드를 작성하였다.
+
+`authenticate` 메소드는 로그인 실패 시 None을 반환한다. 이에 대한 예외 처리도 작성하였다.
 
 
 # 커스텀 User 모델 작성하기
